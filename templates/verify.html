@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h3>Email Verification</h3>
+
+  <p>We sent a verification code to your email.</p>
+
+  <form method="POST">
+    <input type="text" name="code" class="form-control mb-2"
+           placeholder="Enter verification code" required>
+
+    <button class="btn btn-success w-100">Verify</button>
+  </form>
+</div>
+{% endblock %}

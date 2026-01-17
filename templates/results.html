@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<canvas id="chart"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels: [{% for c in candidates %}'{{c.name}}',{% endfor %}],
+    datasets: [{ data: [{% for c in candidates %}{{c.votes}},{% endfor %}] }]
+  }
+});
+</script>
+{% endblock %}

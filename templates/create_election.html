@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h2>Create Election</h2>
+  <form method="POST">
+    <input type="text" name="title" class="form-control mb-2" placeholder="Election Title" required>
+    <input type="text" name="description" class="form-control mb-2" placeholder="Description">
+    <button type="submit" class="btn btn-primary w-100">Create & Activate</button>
+  </form>
+</div>
+{% endblock %}
