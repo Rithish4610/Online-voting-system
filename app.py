@@ -143,6 +143,9 @@ def vote(id):
             c.votes += 1
             db.session.add(v)
             db.session.commit()
+            flash(f"Voted candidate: {c.name}", "success")
+        else:
+            flash("You have already voted in this election.", "warning")
         return redirect('/dashboard')
     candidates = Candidate.query.filter_by(election_id=id).all()
     return render_template('vote.html', candidates=candidates)
@@ -185,6 +188,45 @@ def make_admin():
 
 # --- DB INIT ---
 if __name__ == '__main__':
+    # Temporary route to add 'leader selection' election and candidates
+    @app.route('/add-leader-election')
+    def add_leader_election():
+        election = Election.query.filter_by(title="leader selection").first()
+        if not election:
+            election = Election(title="leader selection", description="Election for leader selection", is_active=True)
+            db.session.add(election)
+            db.session.commit()
+        candidates = ["vinayak", "prem", "sumanth", "mahat", "ganesh"]
+        for name in candidates:
+            exists = Candidate.query.filter_by(name=name, election_id=election.id).first()
+            if not exists:
+                c = Candidate(name=name, election_id=election.id)
+                db.session.add(c)
+        db.session.commit()
+        return "Leader selection election and candidates added."
+    # Temporary route to remove all elections and candidates
+    @app.route('/remove-all-elections')
+    def remove_all_elections():
+        Candidate.query.delete()
+        Election.query.delete()
+        db.session.commit()
+        return "All elections and candidates removed."
+    # Temporary route to add example elections
+    @app.route('/add-example-elections')
+    def add_example_elections():
+        examples = [
+            {"title": "CSE", "description": "Computer Science and Engineering"},
+            {"title": "AI&ML", "description": "Artificial Intelligence and Machine Learning"},
+            {"title": "AI&DS", "description": "Artificial Intelligence and Data Science"},
+            {"title": "ECE", "description": "Electronics and Communication Engineering"},
+        ]
+        for ex in examples:
+            exists = Election.query.filter_by(title=ex["title"]).first()
+            if not exists:
+                e = Election(title=ex["title"], description=ex["description"], is_active=True)
+                db.session.add(e)
+        db.session.commit()
+        return "Example elections added."
     with app.app_context():
         db.create_all()
     app.run(debug=True)
